@@ -6,7 +6,7 @@ using Cronos;
 namespace hackernews.Services
 {
     /// <summary>
-    /// Credits dotnet-labs, copied from dotnet-labs for demonstrating how can we improve ther performance of background pulling latest news
+    /// Credits dotnet-labs, copied from dotnet-labs for demonstrating how can we improve the performance by pulling news in background.
     /// </summary>
     public abstract class AbstractCronJobService : IHostedService, IDisposable
     {
