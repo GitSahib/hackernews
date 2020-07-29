@@ -5,7 +5,7 @@
     </div>
   </div>
 </div>
-<div class="row" *ngIf="data && data.pageCount > 1">
+<div class="row">
   <div class="col-sm-2 pr-0">
     <div class="h3">{{request.type | humanize}}</div></div>
   <div class="col-sm-2 px-0">
@@ -15,10 +15,10 @@
     </select>
     <label class="col-sm-3 p-0">records</label>
   </div>
-  <div class="col-sm-3 page-info pt-1 text-center">
-    <label class="text-italic">{{'Showing ' + (data.page * data.pageSize + 1) + ' to ' + (data.page * data.pageSize + data.pageSize) + ' of ' + (data.totalCount == data.filtered ? data.totalCount : data.filtered + " of " + data.totalCount) + ' records'}}</label>
+  <div class="col-sm-3 page-info pt-1 text-center" *ngIf="data">
+    <label class="text-italic text-sm">{{'Showing ' + fromRow + ' to ' + maxRows + ' of ' + (data.totalCount == data.filtered ? data.totalCount : data.filtered + " of " + data.totalCount) + ' records'}}</label>
   </div>
-  <div class="col-sm-5 pl-0">      
+  <div class="col-sm-5 pl-0" *ngIf="data && data.pageCount > 1">      
       <nav aria-label="Page navigation">
         <ul class="pagination float-right">
           <li class="page-item">
@@ -40,9 +40,6 @@
             <a stop-propagation class="page-link" (click)="loadPage(data.page + 1)" [hidden]="data.page >= data.pageCount - 1" href="#">{{ data.page + 2}}</a>
           </li>
           <li class="page-item">
-            <a stop-propagation class="page-link" (click)="loadPage(data.page + 2)" [hidden]="data.page >= data.pageCount - 2" href="#">{{ data.page + 3}}</a>
-          </li>
-          <li class="page-item">
             <button stop-propagation class="page-link" (click)="loadPage(data.page+1)" [disabled]="data.page >= data.pageCount - 1" href="#">Next</button>
           </li>
           <li class="page-item">
@@ -55,10 +52,10 @@
       </nav>
     </div>
 </div>
-<div class="row">
-  <div class="col-md-12">
-    <label class="text-italic" *ngIf="data && data.filtered != data.totalCount">{{'filtered ' + data.filtered + " from total of " + data.totalCount + " records."}}</label>
-    <input class="form-control" placeholder="search... (type here and hit enter or leave the search box)" [(ngModel)]="search" (change)="searchChanged()" />
+<div class="row" *ngIf="data">
+  <div class="col-md-12 text-center">
+    <label class="text-italic d-block text-sm" [style.visibility]="!search ? 'hidden' : 'visible'">{{'filtered ' + data.filtered + " from total of " + data.totalCount + " records."}}</label>
+    <input class="form-control" placeholder="search..." [(ngModel)]="search" (input)="searchChanged()" />
   </div>
 </div>
 <table class='table table-striped list-group' aria-labelledby="tableLabel" *ngIf="data && data.content">

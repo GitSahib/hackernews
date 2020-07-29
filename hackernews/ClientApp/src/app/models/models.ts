@@ -1,6 +1,7 @@
 export class Pageable<T> {
   content: T[];
   page: number;
+  filtered: number;
   totalCount: number;
   pageSize: number;
   pageCount: number;

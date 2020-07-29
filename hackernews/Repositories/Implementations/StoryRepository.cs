@@ -11,7 +11,6 @@ using System;
 using hackernews.ViewModels.Response;
 using hackernews.Enums;
 using hackernews.ViewModels.Request;
-using System.IO;
 
 namespace hackernews.Repositories.Implementations
 {
@@ -59,21 +58,26 @@ namespace hackernews.Repositories.Implementations
             if (string.IsNullOrEmpty(request.search))
             {
                 ids = ids.Page(request.page, request.pageSize);
-                request.page = 0;
             }
-
             /*load the id details in separate threads*/
             IEnumerable<Story> stories = (await Task.WhenAll(ids.Select(GetByIdAsync)));
-            /*now page the result*/
-            Pageable<Story> pageable = stories.Page(request);
-            /*fix the counts if no search*/
+            stories = stories.Where(x => x?.link != null && x?.title != null);
+            /*no filter ? easy return pageable*/
             if (string.IsNullOrEmpty(request.search))
             {
-                pageable.filtered = pageable.totalCount = total;
-                pageable.pageCount = pageable.filtered / pageable.pageSize;
-                pageable.page = requestedPage;
+                Pageable<Story> pageable = new Pageable<Story>()
+                {
+                    filtered = total,
+                    totalCount = total,
+                    pageSize = request.pageSize,
+                    page = requestedPage,
+                    content = stories
+                };
+                pageable.Calculate();
+                return pageable;
             }
-            return pageable;
+            /*if we filter then call the pager*/
+            return stories.Page(request);
         }
     }
 }

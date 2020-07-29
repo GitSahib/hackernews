@@ -2,12 +2,13 @@ using hackernews.Repositories.Implementations;
 using hackernews.Repositories.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using hackernews.Extensions;
+using hackernews.CronJobs;
 
 namespace hackernews
 {
@@ -23,6 +24,21 @@ namespace hackernews
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCronJob<TopNewsCronJob>(c =>
+            {
+                c.TimeZoneInfo = TimeZoneInfo.Local;
+                c.CronExpression = @"*/3 * * * *";
+            });
+            services.AddCronJob<LatestNewsCronJob>(c =>
+            {
+                c.TimeZoneInfo = TimeZoneInfo.Local;
+                c.CronExpression = @"*/2 * * * *";
+            });
+            services.AddCronJob<BestNewsCronJob>(c =>
+            {
+                c.TimeZoneInfo = TimeZoneInfo.Local;
+                c.CronExpression = @"*/3 * * * *";
+            });
             services.AddHttpClient<IStoryRepository, StoryRepository>(client =>
             {
                 client.BaseAddress = new Uri(Configuration["Remote:URL"]);

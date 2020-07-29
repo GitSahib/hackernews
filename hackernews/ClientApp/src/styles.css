@@ -29,3 +29,6 @@ code {
 .text-italic{
     font-style: italic;
 }
+.text-sm{
+    font-size: 12px;
+}
