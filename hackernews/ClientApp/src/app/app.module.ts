@@ -10,6 +10,7 @@ import { HomeComponent } from './home/home.component';
 import { PagedDataComponent } from './news/paged-data.component';
 import { HumanizePipe } from './pipes/humanize.pipe';
 import { StopPropagation } from './common/stop-propagation.directive';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { StopPropagation } from './common/stop-propagation.directive';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'load-news/:type', component: PagedDataComponent },
-    ])
+    ]),
+    BrowserAnimationsModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [HumanizePipe],

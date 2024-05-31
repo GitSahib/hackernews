@@ -49,6 +49,14 @@ namespace hackernews
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "_myAllowSpecificOrigins",
+                policy =>
+                {
+                    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,7 +79,7 @@ namespace hackernews
             {
                 app.UseSpaStaticFiles();
             }
-
+            app.UseCors("_myAllowSpecificOrigins");
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
@@ -90,7 +98,7 @@ namespace hackernews
 
                 if (env.IsDevelopment())
                 {
-                    spa.UseAngularCliServer(npmScript: "start");
+                    //spa.UseAngularCliServer(npmScript: "start");
                 }
             });
         }

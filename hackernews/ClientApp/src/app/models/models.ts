@@ -7,6 +7,12 @@ export class Pageable<T> {
   pageCount: number;
 }
 
+export class Request {
+  type: string;
+  page: number;
+  pageSize: number;
+  search: string
+}
 export class Story {
   id: number;
   title: number;
